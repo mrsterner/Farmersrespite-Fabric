@@ -5,19 +5,20 @@ import com.chefsdelights.farmersrespite.common.block.entity.container.KettleCont
 import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemHandler;
 import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemStackHandler;
 import com.chefsdelights.farmersrespite.common.block.entity.inventory.KettlePotInventory;
-import com.chefsdelights.farmersrespite.common.block.entity.inventory.RecipeWrapper;
 import com.chefsdelights.farmersrespite.common.crafting.KettleRecipe;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
 import com.chefsdelights.farmersrespite.core.registry.FRBlockEntityTypes;
 import com.chefsdelights.farmersrespite.core.registry.FRRecipeSerializers;
 import com.nhoryzon.mc.farmersdelight.entity.block.HeatableBlockEntity;
 import com.nhoryzon.mc.farmersdelight.entity.block.SyncedBlockEntity;
+import com.nhoryzon.mc.farmersdelight.entity.block.inventory.RecipeWrapper;
 import com.nhoryzon.mc.farmersdelight.mixin.accessors.RecipeManagerAccessorMixin;
 import com.nhoryzon.mc.farmersdelight.registry.ParticleTypesRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -29,9 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.Nameable;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -48,14 +47,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider, HeatableBlockEntity, Nameable {
+public class KettleBlockEntity extends SyncedBlockEntity implements KettlePotInventory, ExtendedScreenHandlerFactory, HeatableBlockEntity, Nameable {
     public static final String TAG_KEY_COOK_RECIPES_USED = "RecipesUsed";
     public static final int MEAL_DISPLAY_SLOT = 2;
     public static final int CONTAINER_SLOT = 3;
     public static final int OUTPUT_SLOT = 4;
     public static final int INVENTORY_SIZE = OUTPUT_SLOT + 1;
-    private final KettlePotInventory inventory = new KettlePotInventory(this);
     private Component customName;
+    private final NonNullList<ItemStack> inventory;
     private int cookTime;
     private int cookTimeTotal;
     private ItemStack mealContainer;
@@ -68,6 +67,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
     public KettleBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(FRBlockEntityTypes.KETTLE, blockPos, blockState);
         this.mealContainer = ItemStack.EMPTY;
+        this.inventory = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
         this.cookingPotData = new KettleBlockEntity.CookingPotSyncedData();
         this.experienceTracker = new Object2IntOpenHashMap();
         this.checkNewRecipe = true;
@@ -86,7 +86,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
 
     public void load(CompoundTag tag) {
         super.load(tag);
-        this.inventory.readNbt(tag.getCompound("Inventory"));
+        this.readInventoryNbt(tag);
         this.cookTime = tag.getInt("CookTime");
         this.cookTimeTotal = tag.getInt("CookTimeTotal");
         this.mealContainer = ItemStack.of(tag.getCompound("Container"));
@@ -114,7 +114,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
         }
         tag.putBoolean("NeedWater", needWater);
         tag.put("Container", this.mealContainer.save(new CompoundTag()));
-        tag.put("Inventory", this.inventory.writeNbt(new CompoundTag()));
+        this.writeInventoryNbt(tag);
         CompoundTag compoundRecipes = new CompoundTag();
         this.experienceTracker.forEach((identifier, craftedAmount) -> {
             compoundRecipes.putInt(identifier.toString(), craftedAmount);
@@ -131,13 +131,13 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
             }
 
             tag.put("Container", this.mealContainer.save(new CompoundTag()));
-            ItemStackHandler drops = new ItemStackHandler(INVENTORY_SIZE);
+            NonNullList<ItemStack> drops = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
 
             for (int i = 0; i < INVENTORY_SIZE; ++i) {
-                drops.setItem(i, i == MEAL_DISPLAY_SLOT ? this.inventory.getItem(i) : ItemStack.EMPTY);
+                drops.set(i, i == MEAL_DISPLAY_SLOT ? this.getItem(i) : ItemStack.EMPTY);
             }
 
-            tag.put("Inventory", drops.writeNbt(new CompoundTag()));
+            tag.put("Inventory", ContainerHelper.saveAllItems(new CompoundTag(), drops));
             return tag;
         }
     }
@@ -159,7 +159,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
         boolean isHeated = cookingPot.isHeated(world, pos);
         boolean dirty = false;
         if (isHeated && cookingPot.hasInput()) {
-            Optional<KettleRecipe> recipe = cookingPot.getMatchingRecipe(new RecipeWrapper(cookingPot.inventory));
+            Optional<KettleRecipe> recipe = cookingPot.getMatchingRecipe(new com.nhoryzon.mc.farmersdelight.entity.block.inventory.RecipeWrapper(cookingPot));
             if (recipe.isPresent() && cookingPot.canCook(recipe.get())) {
                 dirty = cookingPot.processCooking(recipe.get());
             } else {
@@ -174,7 +174,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
             if (!cookingPot.doesMealHaveContainer(meal)) {
                 cookingPot.moveMealToOutput();
                 dirty = true;
-            } else if (!cookingPot.getInventory().getItem(CONTAINER_SLOT).isEmpty()) {
+            } else if (!cookingPot.getItem(CONTAINER_SLOT).isEmpty()) {
                 cookingPot.useStoredContainersOnMeal();
                 dirty = true;
             }
@@ -230,7 +230,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
 
     private boolean hasInput() {
         for (int i = 0; i < MEAL_DISPLAY_SLOT; ++i) {
-            if (!this.inventory.getItem(i).isEmpty()) {
+            if (!this.getItem(i).isEmpty()) {
                 return true;
             }
         }
@@ -245,13 +245,13 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
             if (recipeOutput.isEmpty()) {
                 return false;
             } else {
-                ItemStack currentOutput = this.inventory.getItem(MEAL_DISPLAY_SLOT);
+                ItemStack currentOutput = this.getItem(MEAL_DISPLAY_SLOT);
                 if ((isWater() || !needWater)) {
                     if (currentOutput.isEmpty()) {
                         return true;
                     } else if (!ItemStack.isSameItem(currentOutput, recipeOutput)) {
                         return false;
-                    } else if (currentOutput.getCount() + recipeOutput.getCount() <= this.inventory.getMaxStackSize()) {
+                    } else if (currentOutput.getCount() + recipeOutput.getCount() <= this.getMaxStackSize()) {
                         return true;
                     } else {
                         return currentOutput.getCount() + recipeOutput.getCount() <= recipeOutput.getMaxStackSize();
@@ -273,9 +273,9 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
                 this.cookTime = 0;
                 this.mealContainer = recipe.container;
                 ItemStack recipeOutput = recipe.getResultItem(level.registryAccess());
-                ItemStack currentOutput = this.inventory.getItem(MEAL_DISPLAY_SLOT);
+                ItemStack currentOutput = this.getItem(MEAL_DISPLAY_SLOT);
                 if (currentOutput.isEmpty()) {
-                    this.inventory.setItem(MEAL_DISPLAY_SLOT, recipeOutput.copy());
+                    this.setItem(MEAL_DISPLAY_SLOT, recipeOutput.copy());
                 } else if (currentOutput.getItem() == recipeOutput.getItem()) {
                     currentOutput.grow(recipeOutput.getCount());
                 }
@@ -286,19 +286,19 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
                 }
 
                 for (int i = 0; i < MEAL_DISPLAY_SLOT; ++i) {
-                    ItemStack itemStack = this.inventory.getItem(i);
+                    ItemStack itemStack = this.getItem(i);
                     if (itemStack.getItem().hasCraftingRemainingItem() && this.level != null) {
                         Direction direction = this.getBlockState().getValue(KettleBlock.FACING).getCounterClockWise();
                         double dropX = (double) this.worldPosition.getX() + 0.5 + (double) direction.getStepX() * 0.25;
                         double dropY = (double) this.worldPosition.getY() + 0.7;
                         double dropZ = (double) this.worldPosition.getZ() + 0.5 + (double) direction.getStepZ() * 0.25;
-                        ItemEntity entity = new ItemEntity(this.level, dropX, dropY, dropZ, new ItemStack(this.inventory.getItem(i).getItem().getCraftingRemainingItem()));
+                        ItemEntity entity = new ItemEntity(this.level, dropX, dropY, dropZ, new ItemStack(this.getItem(i).getItem().getCraftingRemainingItem()));
                         entity.setDeltaMovement((float) direction.getStepX() * 0.08F, 0.25, (float) direction.getStepZ() * 0.08F);
                         this.level.addFreshEntity(entity);
                     }
 
-                    if (!this.inventory.getItem(i).isEmpty()) {
-                        this.inventory.getItem(i).shrink(1);
+                    if (!this.getItem(i).isEmpty()) {
+                        this.getItem(i).shrink(1);
                     }
                 }
 
@@ -323,10 +323,9 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
     }
 
     public void grantStoredRecipeExperience(Level world, Vec3 pos) {
-        ObjectIterator var3 = this.experienceTracker.object2IntEntrySet().iterator();
 
-        while (var3.hasNext()) {
-            Object2IntMap.Entry<ResourceLocation> entry = (Object2IntMap.Entry) var3.next();
+        for (Object2IntMap.Entry<ResourceLocation> resourceLocationEntry : this.experienceTracker.object2IntEntrySet()) {
+            Object2IntMap.Entry<ResourceLocation> entry = (Object2IntMap.Entry) resourceLocationEntry;
             world.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
                 splitAndSpawnExperience(world, pos, entry.getIntValue(), ((KettleRecipe) recipe).getExperience());
             });
@@ -374,7 +373,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
     }
 
     public ItemStack getMeal() {
-        return this.inventory.getItem(MEAL_DISPLAY_SLOT);
+        return this.getItem(MEAL_DISPLAY_SLOT);
     }
 
     public boolean isHeated() {
@@ -385,18 +384,18 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
         NonNullList<ItemStack> drops = NonNullList.create();
 
         for (int i = 0; i < INVENTORY_SIZE; ++i) {
-            drops.add(i == MEAL_DISPLAY_SLOT ? ItemStack.EMPTY : this.inventory.getItem(i));
+            drops.add(i == MEAL_DISPLAY_SLOT ? ItemStack.EMPTY : this.getItem(i));
         }
 
         return drops;
     }
 
     private void moveMealToOutput() {
-        ItemStack mealDisplay = this.inventory.getItem(MEAL_DISPLAY_SLOT);
-        ItemStack finalOutput = this.inventory.getItem(OUTPUT_SLOT);
+        ItemStack mealDisplay = this.getItem(MEAL_DISPLAY_SLOT);
+        ItemStack finalOutput = this.getItem(OUTPUT_SLOT);
         int mealCount = Math.min(mealDisplay.getCount(), mealDisplay.getMaxStackSize() - finalOutput.getCount());
         if (finalOutput.isEmpty()) {
-            this.inventory.setItem(OUTPUT_SLOT, mealDisplay.split(mealCount));
+            this.setItem(OUTPUT_SLOT, mealDisplay.split(mealCount));
         } else if (finalOutput.getItem() == mealDisplay.getItem()) {
             mealDisplay.shrink(mealCount);
             finalOutput.grow(mealCount);
@@ -405,15 +404,15 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
     }
 
     private void useStoredContainersOnMeal() {
-        ItemStack mealDisplay = this.inventory.getItem(MEAL_DISPLAY_SLOT);
-        ItemStack containerInput = this.inventory.getItem(CONTAINER_SLOT);
-        ItemStack finalOutput = this.inventory.getItem(OUTPUT_SLOT);
+        ItemStack mealDisplay = this.getItem(MEAL_DISPLAY_SLOT);
+        ItemStack containerInput = this.getItem(CONTAINER_SLOT);
+        ItemStack finalOutput = this.getItem(OUTPUT_SLOT);
         if (this.isContainerValid(containerInput) && finalOutput.getCount() < finalOutput.getMaxStackSize()) {
             int smallerStack = Math.min(mealDisplay.getCount(), containerInput.getCount());
             int mealCount = Math.min(smallerStack, mealDisplay.getMaxStackSize() - finalOutput.getCount());
             if (finalOutput.isEmpty()) {
                 containerInput.shrink(mealCount);
-                this.inventory.setItem(OUTPUT_SLOT, mealDisplay.split(mealCount));
+                this.setItem(OUTPUT_SLOT, mealDisplay.split(mealCount));
             } else if (finalOutput.getItem() == mealDisplay.getItem()) {
                 mealDisplay.shrink(mealCount);
                 containerInput.shrink(mealCount);
@@ -440,20 +439,29 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
         if (containerItem.isEmpty()) {
             return false;
         } else {
-            return !this.mealContainer.isEmpty() ? ItemStack.isSameItem(this.mealContainer, containerItem) : ItemStack.isSameItem(new ItemStack(this.getMeal().getItem().getCraftingRemainingItem()), containerItem);
+            return !this.mealContainer.isEmpty() ? ItemStack.isSameItem(this.mealContainer, containerItem) : containerItem.is(this.getMeal().getItem().getCraftingRemainingItem());
         }
-    }
-
-    public ItemHandler getInventory() {
-        return this.inventory;
     }
 
     public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
         buf.writeBlockPos(this.worldPosition);
     }
 
+    public void onContentsChanged(int slot) {
+        if (slot >= 0 && slot < 4) {
+            this.checkNewRecipe = true;
+        }
+
+        this.inventoryChanged();
+    }
+
     public void setCheckNewRecipe(boolean checkNewRecipe) {
         this.checkNewRecipe = checkNewRecipe;
+    }
+
+    @Override
+    public NonNullList<ItemStack> getItems() {
+        return inventory;
     }
 
     private class CookingPotSyncedData implements ContainerData {

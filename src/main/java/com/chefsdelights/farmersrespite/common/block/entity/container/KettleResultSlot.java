@@ -4,16 +4,17 @@ import com.chefsdelights.farmersrespite.common.block.entity.KettleBlockEntity;
 import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemHandler;
 import com.chefsdelights.farmersrespite.common.block.entity.inventory.slot.SlotItemHandler;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class KettleResultSlot extends SlotItemHandler {
+public class KettleResultSlot extends Slot {
     public final KettleBlockEntity tileEntity;
     private final Player player;
     private int removeCount;
 
-    public KettleResultSlot(Player player, KettleBlockEntity tile, ItemHandler inventoryIn, int index, int xPosition, int yPosition) {
-        super(inventoryIn, index, xPosition, yPosition);
+    public KettleResultSlot(Player player, KettleBlockEntity tile, int index, int xPosition, int yPosition) {
+        super(tile, index, xPosition, yPosition);
         this.tileEntity = tile;
         this.player = player;
     }

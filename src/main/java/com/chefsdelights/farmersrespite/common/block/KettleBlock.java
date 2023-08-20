@@ -5,10 +5,11 @@ import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemHandle
 import com.chefsdelights.farmersrespite.core.registry.FRBlockEntityTypes;
 import com.chefsdelights.farmersrespite.core.registry.FRSounds;
 import com.chefsdelights.farmersrespite.core.utility.FRTextUtils;
-import com.chefsdelights.farmersrespite.core.utility.MathUtils;
 import com.nhoryzon.mc.farmersdelight.block.CookingPotBlock;
 import com.nhoryzon.mc.farmersdelight.block.state.CookingPotSupport;
+import com.nhoryzon.mc.farmersdelight.entity.block.CookingPotBlockEntity;
 import com.nhoryzon.mc.farmersdelight.registry.TagsRegistry;
+import com.nhoryzon.mc.farmersdelight.util.MathUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -56,7 +57,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class KettleBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class KettleBlock extends BaseEntityBlock implements WorldlyContainerHolder, SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<CookingPotSupport> SUPPORT = EnumProperty.create("support", CookingPotSupport.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -271,9 +272,8 @@ public class KettleBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
     @Override
     public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof KettleBlockEntity) {
-            ItemHandler inventory = ((KettleBlockEntity) tileEntity).getInventory();
-            return MathUtils.calcRedstoneFromItemHandler(inventory);
+        if (tileEntity instanceof KettleBlockEntity kettleBlockEntity) {
+            return MathUtils.calcRedstoneFromItemHandler(kettleBlockEntity);
         }
         return 0;
     }
@@ -296,6 +296,16 @@ public class KettleBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
             return createTickerHelper(blockEntity, FRBlockEntityTypes.KETTLE, KettleBlockEntity::animationTick);
         } else {
             return createTickerHelper(blockEntity, FRBlockEntityTypes.KETTLE, KettleBlockEntity::cookingTick);
+        }
+    }
+
+    @Override
+    public WorldlyContainer getContainer(BlockState blockState, LevelAccessor levelAccessor, BlockPos blockPos) {
+        BlockEntity var5 = levelAccessor.getBlockEntity(blockPos);
+        if (var5 instanceof KettleBlockEntity kettleBlockEntity) {
+            return kettleBlockEntity;
+        } else {
+            return null;
         }
     }
 }
