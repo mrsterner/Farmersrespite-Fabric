@@ -74,7 +74,10 @@ public class FRItems {
     public static final Item ROSE_HIP_PIE_SLICE = register("rose_hip_pie_slice", new Item(new Item.Properties().food(FRFoods.ROSE_HIP_PIE_SLICE)));
 
     public static <T extends Item> T register(String path, T item) {
-        ITEMS.add(item);
+        if (!path.contains("strong") || !path.contains("long") ) {
+            ITEMS.add(item);
+        }
+
         return Registry.register(BuiltInRegistries.ITEM, FarmersRespite.id(path), item);
     }
 }
