@@ -18,7 +18,7 @@ public class WildTeaBushFeature extends Feature<SimpleBlockConfiguration> {
     public boolean place(FeaturePlaceContext<SimpleBlockConfiguration> context) {
         SimpleBlockConfiguration config = context.config();
         WorldGenLevel level = context.level();
-        BlockState blockstate = FRBlocks.WILD_TEA_BUSH.defaultBlockState();
+        BlockState blockstate = FRBlocks.WILD_TEA_BUSH.get().defaultBlockState();
         BlockPos pos = context.origin();
         BlockState state = config.toPlace().getState(context.random(), pos);
         if (state.canSurvive(level, pos)) {

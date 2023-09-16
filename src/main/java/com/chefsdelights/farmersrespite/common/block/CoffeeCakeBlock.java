@@ -98,7 +98,7 @@ public class CoffeeCakeBlock extends CakeBlock {
         } else {
             worldIn.removeBlock(pos, false);
         }
-        Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(FRItems.COFFEE_CAKE_SLICE));
+        Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(FRItems.COFFEE_CAKE_SLICE.get()));
         worldIn.playSound(null, pos, SoundEvents.WOOL_BREAK, SoundSource.PLAYERS, 0.8F, 0.8F);
         return InteractionResult.SUCCESS;
     }

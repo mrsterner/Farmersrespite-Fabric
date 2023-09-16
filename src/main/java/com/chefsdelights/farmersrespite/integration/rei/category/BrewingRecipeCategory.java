@@ -26,7 +26,7 @@ public class BrewingRecipeCategory implements DisplayCategory<BrewingRecipeDispl
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(FarmersRespite.MOD_ID, "textures/gui/rei/kettle_rei.png");
 
     public Renderer getIcon() {
-        return EntryStacks.of(FRBlocks.KETTLE);
+        return EntryStacks.of(FRBlocks.KETTLE.get());
     }
 
     public Component getTitle() {

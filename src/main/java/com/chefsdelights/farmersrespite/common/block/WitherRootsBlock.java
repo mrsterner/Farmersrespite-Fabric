@@ -35,7 +35,7 @@ public class WitherRootsBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        if (state == FRBlocks.WITHER_ROOTS.defaultBlockState()) {
+        if (state == FRBlocks.WITHER_ROOTS.get().defaultBlockState()) {
             return SHAPE_SMALL;
         }
         return SHAPE;

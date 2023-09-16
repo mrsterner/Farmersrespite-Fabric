@@ -49,7 +49,7 @@ public class CoffeeMiddleStemBlock extends BushBlock implements BonemealableBloc
 
     @Override
     public boolean mayPlaceOn(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-        return pState.is(FRBlocks.COFFEE_STEM_DOUBLE);
+        return pState.is(FRBlocks.COFFEE_STEM_DOUBLE.get());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class CoffeeMiddleStemBlock extends BushBlock implements BonemealableBloc
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return new ItemStack(FRItems.COFFEE_BEANS);
+        return new ItemStack(FRItems.COFFEE_BEANS.get());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CoffeeMiddleStemBlock extends BushBlock implements BonemealableBloc
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         for (BlockPos neighborPos : WitherRootsUtil.randomInSquareDown(random, pos, 2)) {
             BlockState neighborState = level.getBlockState(neighborPos);
-            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.defaultBlockState();
+            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.get().defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.get().defaultBlockState();
             if ((random.nextInt(2) == 0)) {
                 if (neighborState.getBlock() instanceof CropBlock) {
                     level.setBlockAndUpdate(neighborPos, witherRootsState);
@@ -96,7 +96,7 @@ public class CoffeeMiddleStemBlock extends BushBlock implements BonemealableBloc
         if (!flag && player.getItemInHand(handIn).getItem() == Items.BONE_MEAL) {
             return InteractionResult.PASS;
         } else if (i == 2) {
-            popResource(world, pos, new ItemStack(FRItems.COFFEE_BERRIES, 1));
+            popResource(world, pos, new ItemStack(FRItems.COFFEE_BERRIES.get(), 1));
             world.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
             world.setBlock(pos, state.setValue(AGE, 0), 2);
             return InteractionResult.sidedSuccess(world.isClientSide);

@@ -98,7 +98,7 @@ public class KettleContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return stillValid(canInteractWithCallable, playerIn, FRBlocks.KETTLE);
+        return stillValid(canInteractWithCallable, playerIn, FRBlocks.KETTLE.get());
     }
 
     @Override

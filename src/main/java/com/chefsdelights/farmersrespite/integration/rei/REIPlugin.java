@@ -35,7 +35,7 @@ public class REIPlugin implements REIClientPlugin {
 
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new BrewingRecipeCategory());
-        registry.addWorkstations(BREWING, EntryStacks.of(FRBlocks.KETTLE));
+        registry.addWorkstations(BREWING, EntryStacks.of(FRBlocks.KETTLE.get()));
     }
 
     public void registerDisplays(DisplayRegistry registry) {

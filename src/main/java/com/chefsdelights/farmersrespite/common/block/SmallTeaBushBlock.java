@@ -32,7 +32,7 @@ public class SmallTeaBushBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
-        return new ItemStack(FRItems.TEA_SEEDS);
+        return new ItemStack(FRItems.TEA_SEEDS.get());
     }
 
     @Override
@@ -60,8 +60,8 @@ public class SmallTeaBushBlock extends BushBlock implements BonemealableBlock {
     @Override
     public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
         if (world.isEmptyBlock(pos.above())) {
-            world.setBlockAndUpdate(pos, FRBlocks.TEA_BUSH.defaultBlockState());
-            world.setBlockAndUpdate(pos.above(), FRBlocks.TEA_BUSH.defaultBlockState().setValue(TeaBushBlock.HALF, DoubleBlockHalf.UPPER));
+            world.setBlockAndUpdate(pos, FRBlocks.TEA_BUSH.get().defaultBlockState());
+            world.setBlockAndUpdate(pos.above(), FRBlocks.TEA_BUSH.get().defaultBlockState().setValue(TeaBushBlock.HALF, DoubleBlockHalf.UPPER));
         }
     }
 }

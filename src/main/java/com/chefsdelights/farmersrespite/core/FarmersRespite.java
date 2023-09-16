@@ -7,6 +7,8 @@ import com.google.common.reflect.Reflection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nhoryzon.mc.farmersdelight.FarmersDelightMod;
+import com.nhoryzon.mc.farmersdelight.registry.BlocksRegistry;
+import com.nhoryzon.mc.farmersdelight.registry.ItemsRegistry;
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -31,23 +33,18 @@ public class FarmersRespite implements ModInitializer {
     public static final String MOD_ID = "farmersrespite";
     public static final ResourceKey<CreativeModeTab> CREATIVE_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation(MOD_ID, "group"));
 
-    public static final Logger LOGGER = LogManager.getLogger();
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting()
-            .disableHtmlEscaping()
-            .create();
-    public static final Gson FD_GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
     @Override
-    @SuppressWarnings("UnstableApiUsage")
     public void onInitialize() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CREATIVE_TAB, FabricItemGroup.builder()
-                .icon(() -> new ItemStack(FRBlocks.KETTLE))
+                .icon(() -> new ItemStack(FRBlocks.KETTLE.get()))
                 .title(Component.translatable(MOD_ID + ".group.main"))
                 .build());
 
+        FRBlocks.registerAll();
+        FRItems.registerAll();
+
         Reflection.initialize(
-                FRItems.class,
-                FRBlocks.class,
                 FRRecipeSerializers.class,
                 FREffects.class,
                 FRBlockEntityTypes.class,
@@ -56,17 +53,11 @@ public class FarmersRespite implements ModInitializer {
                 FRBiomeFeatures.class
         );
 
-        //registerVillagerTradeOffer();
         ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, FRConfiguration.COMMON_CONFIG);
         FRCommonSetup.init();
         FRBiomeFeatures.FRConfiguredFeaturesRegistry.registerAll();
         FRBiomeFeatures.registerAll();
         FRGeneration.init();
-
-        ItemGroupEvents.modifyEntriesEvent(CREATIVE_TAB).register((entries) -> {
-            entries.acceptAll(FRItems.ITEMS.stream().map(Item::getDefaultInstance).toList());
-        });
-
     }
 
     public static ResourceLocation id(String path) {
@@ -75,12 +66,5 @@ public class FarmersRespite implements ModInitializer {
 
     public static MutableComponent i18n(String key, Object... args) {
         return Component.translatable(MOD_ID + "." + key, args);
-    }
-
-    protected void registerVillagerTradeOffer() {
-//		if (FarmersDelightMod.CONFIG.isFarmersBuyFDCrops()) {
-//			TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 1,
-//					factories -> new MerchantOffer(new ItemStack(FRItems., 26)));
-//		}
     }
 }

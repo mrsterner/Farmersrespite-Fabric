@@ -31,11 +31,11 @@ public class CoffeeBushFeature extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel level = context.level();
         BlockPos pos = context.origin();
         RandomSource rand = level.getRandom();
-        BlockState coffeeBushBottom = FRBlocks.COFFEE_BUSH.defaultBlockState();
-        BlockState coffeeBushTop = FRBlocks.COFFEE_BUSH.defaultBlockState().setValue(CoffeeBushBlock.HALF, DoubleBlockHalf.UPPER);
-        BlockState coffeeStem = FRBlocks.COFFEE_STEM.defaultBlockState();
-        BlockState coffeeBushTopBottom = FRBlocks.COFFEE_BUSH_TOP.defaultBlockState();
-        BlockState coffeeBushTopTop = FRBlocks.COFFEE_BUSH_TOP.defaultBlockState().setValue(CoffeeBushTopBlock.HALF, DoubleBlockHalf.UPPER);
+        BlockState coffeeBushBottom = FRBlocks.COFFEE_BUSH.get().defaultBlockState();
+        BlockState coffeeBushTop = FRBlocks.COFFEE_BUSH.get().defaultBlockState().setValue(CoffeeBushBlock.HALF, DoubleBlockHalf.UPPER);
+        BlockState coffeeStem = FRBlocks.COFFEE_STEM.get().defaultBlockState();
+        BlockState coffeeBushTopBottom = FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState();
+        BlockState coffeeBushTopTop = FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState().setValue(CoffeeBushTopBlock.HALF, DoubleBlockHalf.UPPER);
         HashMap<BlockPos, BlockState> blocks = new HashMap<>();
         int i = 0;
         if (rand.nextInt(4) > 2) {
