@@ -10,10 +10,6 @@ import com.chefsdelights.farmersrespite.common.crafting.KettleRecipe;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
 import com.chefsdelights.farmersrespite.core.registry.FRBlockEntityTypes;
 import com.chefsdelights.farmersrespite.core.registry.FRRecipeSerializers;
-import com.nhoryzon.mc.farmersdelight.entity.block.HeatableBlockEntity;
-import com.nhoryzon.mc.farmersdelight.entity.block.SyncedBlockEntity;
-import com.nhoryzon.mc.farmersdelight.mixin.accessors.RecipeManagerAccessorMixin;
-import com.nhoryzon.mc.farmersdelight.registry.ParticleTypesRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -44,6 +40,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import vectorwing.farmersdelight.FarmersDelight;
+import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
+import vectorwing.farmersdelight.common.block.entity.HeatableBlockEntity;
+import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
+import vectorwing.farmersdelight.common.mixin.accessor.RecipeManagerAccessor;
+import vectorwing.farmersdelight.common.registry.ModParticleTypes;
+import vectorwing.farmersdelight.common.registry.ModRecipeTypes;
 
 import java.util.Iterator;
 import java.util.Optional;
@@ -195,8 +198,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
             return Optional.empty();
         } else {
             if (this.lastRecipeID != null) {
-                Recipe<Container> recipe = ((RecipeManagerAccessorMixin) level.getRecipeManager())
-                        .getAllForType(FRRecipeSerializers.BREWING)
+                Recipe<Container> recipe = ((RecipeManagerAccessor) level.getRecipeManager()).getRecipeMap(FRRecipeSerializers.BREWING)
                         .get(lastRecipeID);
                 if (recipe instanceof KettleRecipe kettleRecipe) {
                     if (recipe.matches(inventory, this.level)) {
@@ -367,7 +369,7 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
                 baseY = (double) pos.getY() + 0.5;
                 baseZ = (double) pos.getZ() + 0.5 + (random.nextDouble() * 0.4 - 0.2);
                 double motionY = random.nextBoolean() ? 0.015 : 0.005;
-                world.addParticle(ParticleTypesRegistry.STEAM.get(), baseX, baseY, baseZ, 0.0, motionY, 0.0);
+                world.addParticle(ModParticleTypes.STEAM.get(), baseX, baseY, baseZ, 0.0, motionY, 0.0);
             }
         }
 
@@ -454,6 +456,8 @@ public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider
 
     public void setCheckNewRecipe(boolean checkNewRecipe) {
         this.checkNewRecipe = checkNewRecipe;
+
+        inventoryChanged();
     }
 
     private class CookingPotSyncedData implements ContainerData {

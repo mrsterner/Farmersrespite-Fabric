@@ -4,14 +4,13 @@ import com.chefsdelights.farmersrespite.core.FarmersRespite;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.nhoryzon.mc.farmersdelight.recipe.CookingPotRecipe;
-import com.nhoryzon.mc.farmersdelight.util.RecipeMatcher;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import vectorwing.farmersdelight.FarmersDelight;
 
 public class KettleRecipe implements Recipe<Container> {
     public static RecipeType<KettleRecipe> TYPE = RecipeType.register(FarmersRespite.MOD_ID + ":brewing");
@@ -87,18 +87,35 @@ public class KettleRecipe implements Recipe<Container> {
 
     @Override
     public boolean matches(Container inv, Level worldIn) {
-        java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
+        //java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
+        StackedContents stackedContents = new StackedContents();
         int i = 0;
 
         for (int j = 0; j < INPUT_SLOTS; ++j) {
             ItemStack itemstack = inv.getItem(j);
             if (!itemstack.isEmpty()) {
                 ++i;
-                inputs.add(itemstack);
+                stackedContents.accountStack(itemstack);
             }
         }
-        return i == this.inputItems.size() && RecipeMatcher.findMatches(inputs, this.inputItems) != null;
+        return i == this.inputItems.size() && stackedContents.canCraft(this, null);
     }
+
+    /*
+    public boolean matches(RecipeWrapper inv, Level level) {
+		StackedContents stackedContents = new StackedContents();
+		int i = 0;
+
+		for (int j = 0; j < INPUT_SLOTS; ++j) {
+			ItemStack itemstack = inv.getItem(j);
+			if (!itemstack.isEmpty()) {
+				++i;
+				stackedContents.accountStack(itemstack, 1);
+			}
+		}
+		return i == this.inputItems.size() && stackedContents.canCraft(this, null);
+	}
+     */
 
     @Override
     public ItemStack assemble(Container container, RegistryAccess registryAccess) {

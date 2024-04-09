@@ -1,7 +1,7 @@
 //file:noinspection all
 
 plugins {
-    id 'fabric-loom' version '1.3-SNAPSHOT'
+    id 'fabric-loom' version '1.5-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -41,6 +41,17 @@ repositories {
     }
     maven { url = "https://mvn.devos.one/snapshots/" }
     maven { url 'https://jitpack.io' }
+    maven {
+        name = "Greenhouse Maven"
+        url = 'https://maven.greenhouseteam.dev/releases/'
+    }
+    maven { url = "https://mvn.devos.one/releases/" } // Porting Lib
+    maven {
+        url "https://maven.jamieswhiteshirt.com/libs-release" // Reach Entity Attributes (Required by Porting Lib)
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
 }
 
 dependencies {
@@ -51,7 +62,10 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Api's //
-    modImplementation "curse.maven:farmers-delight-fabric-482834:${project.fd_version}"
+    //modImplementation "curse.maven:farmers-delight-fabric-482834:${project.fd_version}"
+    modImplementation("vectorwing:FarmersDelight:${fdrf_version}") {
+        exclude(group: "net.fabricmc")
+    }
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"

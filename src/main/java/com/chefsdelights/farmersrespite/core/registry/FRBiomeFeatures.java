@@ -4,9 +4,6 @@ import com.chefsdelights.farmersrespite.common.levelgen.feature.CoffeeBushFeatur
 import com.chefsdelights.farmersrespite.common.levelgen.feature.WildTeaBushFeature;
 import com.chefsdelights.farmersrespite.core.FRConfiguration;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
-import com.nhoryzon.mc.farmersdelight.registry.BiomeFeaturesRegistry;
-import com.nhoryzon.mc.farmersdelight.world.feature.WildCropFeature;
-import com.nhoryzon.mc.farmersdelight.world.feature.WildRiceCropFeature;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

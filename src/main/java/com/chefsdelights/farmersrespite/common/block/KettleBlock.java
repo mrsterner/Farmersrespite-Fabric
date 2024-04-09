@@ -6,8 +6,6 @@ import com.chefsdelights.farmersrespite.core.registry.FRBlockEntityTypes;
 import com.chefsdelights.farmersrespite.core.registry.FRSounds;
 import com.chefsdelights.farmersrespite.core.utility.FRTextUtils;
 import com.chefsdelights.farmersrespite.core.utility.MathUtils;
-import com.nhoryzon.mc.farmersdelight.block.CookingPotBlock;
-import com.nhoryzon.mc.farmersdelight.block.state.CookingPotSupport;
 import com.nhoryzon.mc.farmersdelight.registry.TagsRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,6 +50,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import vectorwing.farmersdelight.common.block.state.CookingPotSupport;
 
 import java.util.List;
 

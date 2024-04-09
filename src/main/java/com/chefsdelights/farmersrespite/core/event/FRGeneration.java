@@ -1,14 +1,10 @@
 package com.chefsdelights.farmersrespite.core.event;
 
 import com.chefsdelights.farmersrespite.core.registry.FRBiomeFeatures;
-import com.nhoryzon.mc.farmersdelight.FarmersDelightMod;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class FRGeneration {
 
