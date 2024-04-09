@@ -26,14 +26,12 @@ public class KettleContainer extends AbstractContainerMenu {
     public static final ResourceLocation EMPTY_CONTAINER_SLOT_BOTTLE = new ResourceLocation(FarmersRespite.MOD_ID, "item/empty_container_slot_bottle");
 
     public final KettleBlockEntity tileEntity;
-    public final ItemHandler inventory;
     private final ContainerData kettleData;
     private final ContainerLevelAccess canInteractWithCallable;
 
     public KettleContainer(final int windowId, final Inventory playerInventory, final KettleBlockEntity tileEntity, ContainerData kettleDataIn) {
         super(FRContainerTypes.KETTLE, windowId);
         this.tileEntity = tileEntity;
-        this.inventory = tileEntity.getInventory();
         this.kettleData = kettleDataIn;
         this.canInteractWithCallable = ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
@@ -45,17 +43,17 @@ public class KettleContainer extends AbstractContainerMenu {
         int borderSlotSize = 18;
         for (int row = 0; row < 2; ++row) {
             for (int column = 0; column < 1; ++column) {
-                this.addSlot(new SlotItemHandler(inventory, (row) + column,
+                this.addSlot(new Slot(tileEntity, (row) + column,
                         inputStartX + (column * borderSlotSize),
                         inputStartY + (row * borderSlotSize)));
             }
         }
 
         // Meal Display
-        this.addSlot(new KettleMealSlot(inventory, 2, 118, 26));
+        this.addSlot(new KettleMealSlot(tileEntity, 2, 118, 26));
 
         // Bottle Input
-        this.addSlot(new SlotItemHandler(inventory, 3, 86, 55) {
+        this.addSlot(new Slot(tileEntity, 3, 86, 55) {
 
             @Override
             @Environment(EnvType.CLIENT)
@@ -65,7 +63,7 @@ public class KettleContainer extends AbstractContainerMenu {
         });
 
         // Bowl Output
-        this.addSlot(new KettleResultSlot(playerInventory.player, tileEntity, inventory, 4, 118, 55));
+        this.addSlot(new KettleResultSlot(playerInventory.player, tileEntity, 4, 118, 55));
 
         // Main Player Inventory
         int startPlayerInvY = startY * 4 + 12;
@@ -100,7 +98,7 @@ public class KettleContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return stillValid(canInteractWithCallable, playerIn, FRBlocks.KETTLE);
+        return stillValid(canInteractWithCallable, playerIn, FRBlocks.KETTLE.get());
     }
 
     @Override

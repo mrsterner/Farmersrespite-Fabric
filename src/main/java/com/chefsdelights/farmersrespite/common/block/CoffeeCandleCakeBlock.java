@@ -55,7 +55,7 @@ public class CoffeeCandleCakeBlock extends AbstractCandleBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, Boolean.FALSE));
         this.candle = candle;
 
-        BY_CANDLE_AND_CAKE.put(Pair.of(candle, (CoffeeCakeBlock) FRBlocks.COFFEE_CAKE), this);
+        BY_CANDLE_AND_CAKE.put(Pair.of(candle, (CoffeeCakeBlock) FRBlocks.COFFEE_CAKE.get()), this);
     }
 
     protected Iterable<Vec3> getParticleOffsets(BlockState p_152868_) {
@@ -69,7 +69,7 @@ public class CoffeeCandleCakeBlock extends AbstractCandleBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (!itemstack.is(Items.FLINT_AND_STEEL) && !itemstack.is(Items.FIRE_CHARGE) && FRBlocks.COFFEE_CAKE instanceof CoffeeCakeBlock cakeBlock) {
+        if (!itemstack.is(Items.FLINT_AND_STEEL) && !itemstack.is(Items.FIRE_CHARGE) && FRBlocks.COFFEE_CAKE.get() instanceof CoffeeCakeBlock cakeBlock) {
             if (candleHit(result) && player.getItemInHand(hand).isEmpty() && state.getValue(LIT)) {
                 extinguish(player, state, level, pos);
                 return InteractionResult.sidedSuccess(level.isClientSide);
@@ -95,15 +95,15 @@ public class CoffeeCandleCakeBlock extends AbstractCandleBlock {
             }
 
             level.gameEvent(player, GameEvent.EAT, pos);
-            level.setBlock(pos, FRBlocks.COFFEE_CAKE.defaultBlockState().setValue(CoffeeCakeBlock.BITES, 1), 3);
+            level.setBlock(pos, FRBlocks.COFFEE_CAKE.get().defaultBlockState().setValue(CoffeeCakeBlock.BITES, 1), 3);
             Block.dropResources(state, level, pos);
             return InteractionResult.SUCCESS;
         }
     }
 
     public InteractionResult cutSlice(Level level, BlockPos pos, BlockState state, Player player) {
-        level.setBlock(pos, FRBlocks.COFFEE_CAKE.defaultBlockState().setValue(CoffeeCakeBlock.BITES, 1), 3);
-        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(FRItems.COFFEE_CAKE_SLICE));
+        level.setBlock(pos, FRBlocks.COFFEE_CAKE.get().defaultBlockState().setValue(CoffeeCakeBlock.BITES, 1), 3);
+        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(FRItems.COFFEE_CAKE_SLICE.get()));
         Block.dropResources(state, level, pos);
         level.playSound(null, pos, SoundEvents.WOOL_BREAK, SoundSource.PLAYERS, 0.8F, 0.8F);
         return InteractionResult.SUCCESS;
@@ -111,7 +111,7 @@ public class CoffeeCandleCakeBlock extends AbstractCandleBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return new ItemStack(FRBlocks.COFFEE_CAKE);
+        return new ItemStack(FRBlocks.COFFEE_CAKE.get());
     }
 
     private static boolean candleHit(BlockHitResult result) {

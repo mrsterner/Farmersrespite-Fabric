@@ -59,7 +59,7 @@ public class CoffeeBushBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
-        return new ItemStack(FRItems.COFFEE_BEANS);
+        return new ItemStack(FRItems.COFFEE_BEANS.get());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class CoffeeBushBlock extends BushBlock implements BonemealableBlock {
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         for (BlockPos neighborPos : WitherRootsUtil.randomInSquare(random, pos, 2)) {
             BlockState neighborState = level.getBlockState(neighborPos);
-            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.defaultBlockState();
+            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.get().defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.get().defaultBlockState();
             if ((state.getValue(HALF) == DoubleBlockHalf.LOWER) && (level.isEmptyBlock(pos.above().above())) && random.nextInt(2) == 0) {
                 if (neighborState.getBlock() instanceof CropBlock) {
                     level.setBlockAndUpdate(neighborPos, witherRootsState);
@@ -170,14 +170,14 @@ public class CoffeeBushBlock extends BushBlock implements BonemealableBlock {
     @Override
     public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER && (level.isEmptyBlock(pos.above().above()))) {
-            level.setBlockAndUpdate(pos, FRBlocks.COFFEE_STEM.defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
-            level.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.defaultBlockState());
-            level.setBlockAndUpdate(pos.above().above(), FRBlocks.COFFEE_BUSH_TOP.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
+            level.setBlockAndUpdate(pos, FRBlocks.COFFEE_STEM.get().defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
+            level.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState());
+            level.setBlockAndUpdate(pos.above().above(), FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
         }
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER && (level.isEmptyBlock(pos.above()))) {
-            level.setBlockAndUpdate(pos.below(), FRBlocks.COFFEE_STEM.defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
-            level.setBlockAndUpdate(pos, FRBlocks.COFFEE_BUSH_TOP.defaultBlockState());
-            level.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
+            level.setBlockAndUpdate(pos.below(), FRBlocks.COFFEE_STEM.get().defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
+            level.setBlockAndUpdate(pos, FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState());
+            level.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
         }
     }
 }

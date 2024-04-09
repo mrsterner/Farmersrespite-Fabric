@@ -57,7 +57,7 @@ public class CoffeeDoubleStemBlock extends BushBlock implements BonemealableBloc
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return new ItemStack(FRItems.COFFEE_BEANS);
+        return new ItemStack(FRItems.COFFEE_BEANS.get());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class CoffeeDoubleStemBlock extends BushBlock implements BonemealableBloc
         int rand = random.nextInt(2);
         for (BlockPos neighborPos : WitherRootsUtil.randomInSquare(random, pos, 2)) {
             BlockState neighborState = level.getBlockState(neighborPos);
-            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.defaultBlockState();
+            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.get().defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.get().defaultBlockState();
             if ((random.nextInt(2) == 0)) {
                 if (neighborState.getBlock() instanceof CropBlock) {
                     level.setBlockAndUpdate(neighborPos, witherRootsState);
@@ -119,7 +119,7 @@ public class CoffeeDoubleStemBlock extends BushBlock implements BonemealableBloc
             if (j == 2) {
                 world.setBlock(pos, state.setValue(AGE1, 0), 2);
             }
-            popResource(world, pos, new ItemStack(FRItems.COFFEE_BERRIES, 1));
+            popResource(world, pos, new ItemStack(FRItems.COFFEE_BERRIES.get(), 1));
             world.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
             return InteractionResult.sidedSuccess(world.isClientSide);
         } else {

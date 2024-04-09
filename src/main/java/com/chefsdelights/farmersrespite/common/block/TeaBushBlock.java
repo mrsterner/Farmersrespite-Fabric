@@ -64,7 +64,7 @@ public class TeaBushBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return new ItemStack(FRItems.TEA_SEEDS);
+        return new ItemStack(FRItems.TEA_SEEDS.get());
     }
 
     @Override
@@ -146,23 +146,23 @@ public class TeaBushBlock extends BushBlock implements BonemealableBlock {
             int l = world.random.nextInt(2);
 
             if (i == 0) {
-                popResource(world, pos, new ItemStack(FRItems.GREEN_TEA_LEAVES, 2 + j));
+                popResource(world, pos, new ItemStack(FRItems.GREEN_TEA_LEAVES.get(), 2 + j));
             }
             if (i == 1) {
-                popResource(world, pos, new ItemStack(FRItems.YELLOW_TEA_LEAVES, 2 + j));
+                popResource(world, pos, new ItemStack(FRItems.YELLOW_TEA_LEAVES.get(), 2 + j));
             }
             if (i == 2) {
-                popResource(world, pos, new ItemStack(FRItems.YELLOW_TEA_LEAVES, 1 + j));
-                popResource(world, pos, new ItemStack(FRItems.BLACK_TEA_LEAVES, 1 + l));
+                popResource(world, pos, new ItemStack(FRItems.YELLOW_TEA_LEAVES.get(), 1 + j));
+                popResource(world, pos, new ItemStack(FRItems.BLACK_TEA_LEAVES.get(), 1 + l));
             }
             if (i == 3) {
-                popResource(world, pos, new ItemStack(FRItems.BLACK_TEA_LEAVES, 2 + j));
+                popResource(world, pos, new ItemStack(FRItems.BLACK_TEA_LEAVES.get(), 2 + j));
             }
             if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                world.setBlockAndUpdate(pos, FRBlocks.SMALL_TEA_BUSH.defaultBlockState());
+                world.setBlockAndUpdate(pos, FRBlocks.SMALL_TEA_BUSH.get().defaultBlockState());
             }
             if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                world.setBlockAndUpdate(pos.below(), FRBlocks.SMALL_TEA_BUSH.defaultBlockState());
+                world.setBlockAndUpdate(pos.below(), FRBlocks.SMALL_TEA_BUSH.get().defaultBlockState());
             }
             world.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
             popResource(world, pos, new ItemStack(Items.STICK, k));

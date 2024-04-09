@@ -8,7 +8,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public class KettleEMIRecipe implements EmiRecipe {
     public KettleEMIRecipe(KettleRecipe recipe) {
         this.id = recipe.getId();
         this.ingredient = recipe.getIngredients().stream().map(EmiIngredient::of).toList();
-        this.output = EmiStack.of(recipe.getResultItem(BasicDisplay.registryAccess()));
+        this.output = EmiStack.of(recipe.getResultItem(null));
         this.containerOutput = EmiStack.of(recipe.getOutputContainer());
         this.brewTime = recipe.getBrewTime();
         this.needWater = recipe.getNeedWater();

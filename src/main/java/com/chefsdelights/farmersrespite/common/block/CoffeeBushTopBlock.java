@@ -49,7 +49,7 @@ public class CoffeeBushTopBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public boolean mayPlaceOn(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-        return pState.is(FRBlocks.COFFEE_STEM) || pState.is(FRBlocks.COFFEE_STEM_MIDDLE) || pState.is(FRBlocks.COFFEE_BUSH_TOP);
+        return pState.is(FRBlocks.COFFEE_STEM.get()) || pState.is(FRBlocks.COFFEE_STEM_MIDDLE.get()) || pState.is(FRBlocks.COFFEE_BUSH_TOP.get());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class CoffeeBushTopBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return new ItemStack(FRItems.COFFEE_BEANS);
+        return new ItemStack(FRItems.COFFEE_BEANS.get());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class CoffeeBushTopBlock extends BushBlock implements BonemealableBlock {
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         for (BlockPos neighborPos : WitherRootsUtil.randomInSquareDown(random, pos, 2)) {
             BlockState neighborState = level.getBlockState(neighborPos);
-            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.defaultBlockState();
+            BlockState witherRootsState = random.nextInt(2) == 0 ? FRBlocks.WITHER_ROOTS.get().defaultBlockState() : FRBlocks.WITHER_ROOTS_PLANT.get().defaultBlockState();
             if ((state.getValue(HALF) == DoubleBlockHalf.LOWER) && (level.isEmptyBlock(pos.above().above())) && random.nextInt(2) == 0) {
                 if (neighborState.getBlock() instanceof CropBlock) {
                     level.setBlockAndUpdate(neighborPos, witherRootsState);
@@ -199,19 +199,19 @@ public class CoffeeBushTopBlock extends BushBlock implements BonemealableBlock {
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER && (world.isEmptyBlock(pos.above().above())) && belowState.getBlock() instanceof CoffeeStemBlock) {
             Direction direction = world.getBlockState(pos.below()).getValue(CoffeeStemBlock.FACING);
             int berry = world.getBlockState(pos.below()).getValue(CoffeeStemBlock.AGE);
-            world.setBlockAndUpdate(pos.below(), FRBlocks.COFFEE_STEM_DOUBLE.defaultBlockState().setValue(CoffeeDoubleStemBlock.FACING, direction).setValue(CoffeeDoubleStemBlock.AGE, berry));
-            world.setBlockAndUpdate(pos, FRBlocks.COFFEE_STEM_MIDDLE.defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
-            world.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.defaultBlockState());
-            world.setBlockAndUpdate(pos.above().above(), FRBlocks.COFFEE_BUSH_TOP.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
+            world.setBlockAndUpdate(pos.below(), FRBlocks.COFFEE_STEM_DOUBLE.get().defaultBlockState().setValue(CoffeeDoubleStemBlock.FACING, direction).setValue(CoffeeDoubleStemBlock.AGE, berry));
+            world.setBlockAndUpdate(pos, FRBlocks.COFFEE_STEM_MIDDLE.get().defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
+            world.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState());
+            world.setBlockAndUpdate(pos.above().above(), FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
 
         }
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER && (world.isEmptyBlock(pos.above())) && belowBelowState.getBlock() instanceof CoffeeStemBlock) {
             Direction direction = world.getBlockState(pos.below().below()).getValue(CoffeeStemBlock.FACING);
             int berry = world.getBlockState(pos.below().below()).getValue(CoffeeStemBlock.AGE);
-            world.setBlockAndUpdate(pos.below().below(), FRBlocks.COFFEE_STEM_DOUBLE.defaultBlockState().setValue(CoffeeDoubleStemBlock.FACING, direction).setValue(CoffeeDoubleStemBlock.AGE, berry));
-            world.setBlockAndUpdate(pos.below(), FRBlocks.COFFEE_STEM_MIDDLE.defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
-            world.setBlockAndUpdate(pos, FRBlocks.COFFEE_BUSH_TOP.defaultBlockState());
-            world.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
+            world.setBlockAndUpdate(pos.below().below(), FRBlocks.COFFEE_STEM_DOUBLE.get().defaultBlockState().setValue(CoffeeDoubleStemBlock.FACING, direction).setValue(CoffeeDoubleStemBlock.AGE, berry));
+            world.setBlockAndUpdate(pos.below(), FRBlocks.COFFEE_STEM_MIDDLE.get().defaultBlockState().setValue(CoffeeStemBlock.FACING, this.getDirection(rand)));
+            world.setBlockAndUpdate(pos, FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState());
+            world.setBlockAndUpdate(pos.above(), FRBlocks.COFFEE_BUSH_TOP.get().defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER));
         }
     }
 }

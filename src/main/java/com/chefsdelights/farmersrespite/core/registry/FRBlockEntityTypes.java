@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class FRBlockEntityTypes {
 
-    public static final BlockEntityType<KettleBlockEntity> KETTLE = register("kettle", BlockEntityType.Builder.of(KettleBlockEntity::new, FRBlocks.KETTLE).build(null));
+    public static final BlockEntityType<KettleBlockEntity> KETTLE = register("kettle", BlockEntityType.Builder.of(KettleBlockEntity::new, FRBlocks.KETTLE.get()).build(null));
 
     public static <T extends BlockEntityType<?>> T register(String path, T block) {
         return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, FarmersRespite.id(path), block);
