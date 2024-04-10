@@ -2,7 +2,6 @@ package com.chefsdelights.farmersrespite.common.block;
 
 import com.chefsdelights.farmersrespite.core.registry.FREffects;
 import com.chefsdelights.farmersrespite.core.registry.FRItems;
-import com.nhoryzon.mc.farmersdelight.registry.TagsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import vectorwing.farmersdelight.common.tag.ModTags;
 
 public class CoffeeCakeBlock extends CakeBlock {
 
@@ -49,7 +49,7 @@ public class CoffeeCakeBlock extends CakeBlock {
         }
 
         if (worldIn.isClientSide) {
-            if (stack.is(TagsRegistry.KNIVES)) {
+            if (stack.is(ModTags.KNIVES)) {
                 return cutSlice(worldIn, pos, state, player);
             }
             if (eatSlice(worldIn, pos, state, player).consumesAction()) {
@@ -61,7 +61,7 @@ public class CoffeeCakeBlock extends CakeBlock {
             }
         }
 
-        if (stack.is(TagsRegistry.KNIVES)) {
+        if (stack.is(ModTags.KNIVES)) {
             return cutSlice(worldIn, pos, state, player);
         }
 

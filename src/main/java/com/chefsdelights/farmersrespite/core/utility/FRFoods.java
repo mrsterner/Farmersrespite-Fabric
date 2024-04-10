@@ -1,24 +1,24 @@
 package com.chefsdelights.farmersrespite.core.utility;
 
 import com.chefsdelights.farmersrespite.core.registry.FREffects;
-import com.nhoryzon.mc.farmersdelight.registry.EffectsRegistry;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
+import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class FRFoods {
     // Drinks (mostly for effects)
     public static final FoodProperties GREEN_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.DIG_SPEED, 3600, 0), 1.0F).build();
     public static final FoodProperties YELLOW_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 3600, 0), 1.0F).build();
     public static final FoodProperties BLACK_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.POISON, 200, 0), 1.0F).effect(new MobEffectInstance(FREffects.CAFFEINATED, 200, 0), 1.0F).build();
-    public static final FoodProperties DANDELION_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(EffectsRegistry.COMFORT.get(), 3600, 0), 1.0F).build();
+    public static final FoodProperties DANDELION_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(ModEffects.COMFORT.get(), 3600, 0), 1.0F).build();
     public static final FoodProperties PURULENT_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.WEAKNESS, 600, 0), 1.0F).build();
     public static final FoodProperties COFFEE = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(FREffects.CAFFEINATED, 6000, 1), 1.0F).build();
 
     public static final FoodProperties LONG_GREEN_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.DIG_SPEED, 5400, 0), 1.0F).build();
     public static final FoodProperties LONG_YELLOW_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 5400, 0), 1.0F).build();
     public static final FoodProperties LONG_BLACK_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.POISON, 300, 0), 1.0F).effect(new MobEffectInstance(FREffects.CAFFEINATED, 300, 0), 1.0F).build();
-    public static final FoodProperties LONG_DANDELION_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(EffectsRegistry.COMFORT.get(), 5400, 0), 1.0F).build();
+    public static final FoodProperties LONG_DANDELION_TEA = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(ModEffects.COMFORT.get(), 5400, 0), 1.0F).build();
     public static final FoodProperties LONG_COFFEE = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(FREffects.CAFFEINATED, 12000, 0), 1.0F).build();
     public static final FoodProperties LONG_APPLE_CIDER = (new FoodProperties.Builder()).alwaysEat().effect(new MobEffectInstance(MobEffects.ABSORPTION, 1800, 0), 1.0F).build();
 
@@ -37,7 +37,7 @@ public class FRFoods {
     public static final FoodProperties COFFEE_BERRIES = (new FoodProperties.Builder()).nutrition(2).saturationMod(0.4f).effect(new MobEffectInstance(MobEffects.WITHER, 100, 0), 0.8F).effect(new MobEffectInstance(FREffects.CAFFEINATED, 200, 0), 1.0F).build();
 
     // Bowl Foods
-    public static final FoodProperties BLACK_COD = (new FoodProperties.Builder()).nutrition(10).saturationMod(0.9f).effect(new MobEffectInstance(EffectsRegistry.NOURISHMENT.get(), 3600, 0), 1.0F).effect(new MobEffectInstance(FREffects.CAFFEINATED, 600, 0), 1.0F).build();
+    public static final FoodProperties BLACK_COD = (new FoodProperties.Builder()).nutrition(10).saturationMod(0.9f).effect(new MobEffectInstance(ModEffects.NOURISHMENT.get(), 3600, 0), 1.0F).effect(new MobEffectInstance(FREffects.CAFFEINATED, 600, 0), 1.0F).build();
     public static final FoodProperties TEA_CURRY = (new FoodProperties.Builder()).nutrition(10).saturationMod(0.8f).effect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0), 1.0F).build();
     public static final FoodProperties BLAZING_CHILLI = (new FoodProperties.Builder()).nutrition(10).saturationMod(0.4f).effect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 1200, 0), 1.0F).build();
 

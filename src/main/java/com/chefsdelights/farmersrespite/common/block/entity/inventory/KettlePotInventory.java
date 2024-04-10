@@ -1,7 +1,10 @@
 package com.chefsdelights.farmersrespite.common.block.entity.inventory;
 
 import com.chefsdelights.farmersrespite.common.block.entity.KettleBlockEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
@@ -9,7 +12,7 @@ import vectorwing.farmersdelight.common.block.entity.inventory.CookingPotItemHan
 
 import java.util.stream.IntStream;
 
-public class KettlePotInventory extends ItemStackHandler {
+public class KettlePotInventory extends ItemStackHandlerContainer {
     private static final int SLOTS_INPUT = 2;
     private static final int SLOT_CONTAINER_INPUT = 3;
     private static final int SLOT_MEAL_OUTPUT = 4;
@@ -30,24 +33,6 @@ public class KettlePotInventory extends ItemStackHandler {
         }
 
         return new int[]{SLOT_CONTAINER_INPUT};
-    }
-
-    @Override
-    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
-        if (dir == null || dir.equals(Direction.UP)) {
-            return slot < SLOTS_INPUT;
-        } else {
-            return slot == SLOT_CONTAINER_INPUT;
-        }
-    }
-
-    @Override
-    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction dir) {
-        if (dir == null || dir.equals(Direction.UP)) {
-            return slot < SLOTS_INPUT;
-        } else {
-            return slot == SLOT_MEAL_OUTPUT;
-        }
     }
 
     public void onInventorySlotChanged(int slot) {

@@ -1,6 +1,5 @@
 package com.chefsdelights.farmersrespite.common.item;
 
-import com.nhoryzon.mc.farmersdelight.FarmersDelightMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
@@ -57,7 +56,7 @@ public class DrinkableItem extends ConsumableItem {
 
     @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
-        MutableComponent empty = FarmersDelightMod.i18n("tooltip.milk_bottle");
+        MutableComponent empty = Component.translatable("tooltip.milk_bottle");
         tooltip.add(empty.withStyle(ChatFormatting.BLUE));
     }
 }

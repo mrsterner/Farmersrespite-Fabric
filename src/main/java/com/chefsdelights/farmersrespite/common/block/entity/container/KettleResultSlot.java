@@ -1,20 +1,21 @@
 package com.chefsdelights.farmersrespite.common.block.entity.container;
 
 import com.chefsdelights.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemHandler;
-import com.chefsdelights.farmersrespite.common.block.entity.inventory.slot.SlotItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotItemHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
 
-public class KettleResultSlot extends Slot {
+public class KettleResultSlot extends SlotItemHandler {
     public final KettleBlockEntity tileEntity;
     private final Player player;
     private int removeCount;
 
-    public KettleResultSlot(Player player, KettleBlockEntity tile, int index, int xPosition, int yPosition) {
-        super(tile, index, xPosition, yPosition);
+    public KettleResultSlot(Player player, KettleBlockEntity tile, ItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+        super(inventoryIn, index, xPosition, yPosition);
         this.tileEntity = tile;
         this.player = player;
     }

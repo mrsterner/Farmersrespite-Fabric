@@ -4,8 +4,6 @@ import com.chefsdelights.farmersrespite.common.item.PurulentTeaItem;
 import com.chefsdelights.farmersrespite.common.item.RoseHipTeaItem;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
 import com.chefsdelights.farmersrespite.core.utility.FRFoods;
-import com.nhoryzon.mc.farmersdelight.item.ConsumableItem;
-import com.nhoryzon.mc.farmersdelight.item.DrinkableItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.core.Registry;
@@ -13,6 +11,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import vectorwing.farmersdelight.common.item.ConsumableItem;
+import vectorwing.farmersdelight.common.item.DrinkableItem;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.util.Arrays;
 import java.util.function.Supplier;
@@ -73,7 +74,7 @@ public enum FRItems {
     ROSE_HIP_PIE_SLICE("rose_hip_pie_slice", () -> new Item(new Item.Properties().food(FRFoods.ROSE_HIP_PIE_SLICE)));
 
     private final String pathName;
-    private final Supplier<Item> itemSupplier;
+    public final Supplier<Item> itemSupplier;
     private final Integer burnTime;
     private Item item;
 

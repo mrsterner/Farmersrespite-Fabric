@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import vectorwing.farmersdelight.FarmersDelight;
+import vectorwing.farmersdelight.common.tag.ModTags;
 
 import java.util.Arrays;
 
@@ -39,14 +41,10 @@ public class FarmersRespite implements ModInitializer {
     @Override
     @SuppressWarnings("UnstableApiUsage")
     public void onInitialize() {
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CREATIVE_TAB, FabricItemGroup.builder()
-                .icon(() -> new ItemStack(FRBlocks.KETTLE))
-                .title(Component.translatable(MOD_ID + ".group.main"))
-                .build());
+        FRItems.registerAll();
+        FRBlocks.registerAll();
 
         Reflection.initialize(
-                FRItems.class,
-                FRBlocks.class,
                 FRRecipeSerializers.class,
                 FREffects.class,
                 FRBlockEntityTypes.class,
@@ -54,6 +52,11 @@ public class FarmersRespite implements ModInitializer {
                 FRSounds.class,
                 FRBiomeFeatures.class
         );
+
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CREATIVE_TAB, FabricItemGroup.builder()
+                .icon(() -> new ItemStack(FRBlocks.KETTLE.get()))
+                .title(Component.translatable(MOD_ID + ".group.main"))
+                .build());
 
         //registerVillagerTradeOffer();
         ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, FRConfiguration.COMMON_CONFIG);
@@ -63,7 +66,7 @@ public class FarmersRespite implements ModInitializer {
         FRGeneration.init();
 
         ItemGroupEvents.modifyEntriesEvent(CREATIVE_TAB).register((entries) -> {
-            entries.acceptAll(FRItems.ITEMS.stream().map(Item::getDefaultInstance).toList());
+          //  entries.acceptAll(Arrays.stream(FRItems.values()).map(item -> item.get().getDefaultInstance()).toList());
         });
 
     }

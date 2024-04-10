@@ -2,8 +2,6 @@ package com.chefsdelights.farmersrespite.core.registry;
 
 import com.chefsdelights.farmersrespite.common.block.*;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
-import com.nhoryzon.mc.farmersdelight.block.PieBlock;
-import com.nhoryzon.mc.farmersdelight.registry.BlocksRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -20,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
+import vectorwing.farmersdelight.common.block.PieBlock;
 
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
@@ -48,7 +47,7 @@ public enum FRBlocks {
 
     //Food
     COFFEE_CAKE("coffee_cake", () -> new CoffeeCakeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.WOOL))),
-    ROSE_HIP_PIE("rose_hip_pie", () -> new PieBlock(FRItems.ROSE_HIP_PIE_SLICE.get())),
+    ROSE_HIP_PIE("rose_hip_pie", () -> new PieBlock(BlockBehaviour.Properties.copy(Blocks.CAKE), FRItems.ROSE_HIP_PIE_SLICE.itemSupplier)),
     CANDLE_COFFEE_CAKE("candle_coffee_cake", () -> new CoffeeCandleCakeBlock(Blocks.CANDLE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.WOOL).lightLevel(litBlockEmission(3)))),
     WHITE_CANDLE_COFFEE_CAKE("white_candle_coffee_cake", () -> new CoffeeCandleCakeBlock(Blocks.WHITE_CANDLE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.WOOL).lightLevel(litBlockEmission(3)))),
     ORANGE_CANDLE_COFFEE_CAKE("orange_candle_coffee_cake", () -> new CoffeeCandleCakeBlock(Blocks.ORANGE_CANDLE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.WOOL).lightLevel(litBlockEmission(3)))),

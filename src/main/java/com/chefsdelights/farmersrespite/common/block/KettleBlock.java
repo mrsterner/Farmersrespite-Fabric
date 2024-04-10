@@ -1,12 +1,10 @@
 package com.chefsdelights.farmersrespite.common.block;
 
 import com.chefsdelights.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemHandler;
 import com.chefsdelights.farmersrespite.core.registry.FRBlockEntityTypes;
 import com.chefsdelights.farmersrespite.core.registry.FRSounds;
 import com.chefsdelights.farmersrespite.core.utility.FRTextUtils;
 import com.chefsdelights.farmersrespite.core.utility.MathUtils;
-import com.nhoryzon.mc.farmersdelight.registry.TagsRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -51,6 +49,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.block.state.CookingPotSupport;
+import vectorwing.farmersdelight.common.tag.ModTags;
 
 import java.util.List;
 
@@ -169,7 +168,7 @@ public class KettleBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
     }
 
     private CookingPotSupport getTrayState(LevelAccessor world, BlockPos pos) {
-        if (world.getBlockState(pos.below()).is(TagsRegistry.TRAY_HEAT_SOURCES)) {
+        if (world.getBlockState(pos.below()).is(ModTags.TRAY_HEAT_SOURCES)) {
             return CookingPotSupport.TRAY;
         }
         return CookingPotSupport.NONE;
@@ -271,7 +270,7 @@ public class KettleBlock extends BaseEntityBlock implements SimpleWaterloggedBlo
     public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if (tileEntity instanceof KettleBlockEntity) {
-            ItemHandler inventory = ((KettleBlockEntity) tileEntity).getInventory();
+            var inventory = ((KettleBlockEntity) tileEntity).getInventory();
             return MathUtils.calcRedstoneFromItemHandler(inventory);
         }
         return 0;

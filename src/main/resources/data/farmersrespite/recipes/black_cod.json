@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "c:cooked_fishes/cod"
+      "tag": "c:foods/cooked_fishes/cod"
     },
     {
       "tag": "c:crops/black_tea_leaves"

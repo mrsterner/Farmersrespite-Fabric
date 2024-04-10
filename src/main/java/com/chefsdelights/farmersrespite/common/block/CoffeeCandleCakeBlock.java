@@ -5,7 +5,6 @@ import com.chefsdelights.farmersrespite.core.registry.FREffects;
 import com.chefsdelights.farmersrespite.core.registry.FRItems;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import com.nhoryzon.mc.farmersdelight.registry.TagsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -37,6 +36,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.tuple.Pair;
+import vectorwing.farmersdelight.common.tag.ModTags;
 
 import java.util.Map;
 
@@ -74,7 +74,7 @@ public class CoffeeCandleCakeBlock extends AbstractCandleBlock {
                 extinguish(player, state, level, pos);
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
-            if ((itemstack.is(TagsRegistry.KNIVES))) {
+            if ((itemstack.is(ModTags.KNIVES))) {
                 return cutSlice(level, pos, state, player);
             } else {
                 return eatSlice(level, pos, state, player);

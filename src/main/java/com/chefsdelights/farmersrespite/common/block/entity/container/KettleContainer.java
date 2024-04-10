@@ -2,12 +2,11 @@ package com.chefsdelights.farmersrespite.common.block.entity.container;
 
 import com.chefsdelights.farmersrespite.common.block.KettleBlock;
 import com.chefsdelights.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.chefsdelights.farmersrespite.common.block.entity.inventory.ItemHandler;
-import com.chefsdelights.farmersrespite.common.block.entity.inventory.slot.SlotItemHandler;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
 import com.chefsdelights.farmersrespite.core.registry.FRBlocks;
 import com.chefsdelights.farmersrespite.core.registry.FRContainerTypes;
 import com.mojang.datafixers.util.Pair;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -28,10 +27,12 @@ public class KettleContainer extends AbstractContainerMenu {
     public final KettleBlockEntity tileEntity;
     private final ContainerData kettleData;
     private final ContainerLevelAccess canInteractWithCallable;
+    public final ItemStackHandlerContainer inventory;
 
     public KettleContainer(final int windowId, final Inventory playerInventory, final KettleBlockEntity tileEntity, ContainerData kettleDataIn) {
         super(FRContainerTypes.KETTLE, windowId);
         this.tileEntity = tileEntity;
+        this.inventory = tileEntity.getInventory();
         this.kettleData = kettleDataIn;
         this.canInteractWithCallable = ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos());
 
@@ -43,17 +44,17 @@ public class KettleContainer extends AbstractContainerMenu {
         int borderSlotSize = 18;
         for (int row = 0; row < 2; ++row) {
             for (int column = 0; column < 1; ++column) {
-                this.addSlot(new Slot(tileEntity, (row) + column,
+                this.addSlot(new Slot(inventory, (row) + column,
                         inputStartX + (column * borderSlotSize),
                         inputStartY + (row * borderSlotSize)));
             }
         }
 
         // Meal Display
-        this.addSlot(new KettleMealSlot(tileEntity, 2, 118, 26));
+        this.addSlot(new KettleMealSlot(inventory, 2, 118, 26));
 
         // Bottle Input
-        this.addSlot(new Slot(tileEntity, 3, 86, 55) {
+        this.addSlot(new Slot(inventory, 3, 86, 55) {
 
             @Override
             @Environment(EnvType.CLIENT)
@@ -63,7 +64,7 @@ public class KettleContainer extends AbstractContainerMenu {
         });
 
         // Bowl Output
-        this.addSlot(new KettleResultSlot(playerInventory.player, tileEntity, 4, 118, 55));
+        this.addSlot(new KettleResultSlot(playerInventory.player, tileEntity, inventory, 4, 118, 55));
 
         // Main Player Inventory
         int startPlayerInvY = startY * 4 + 12;
