@@ -6,6 +6,7 @@ import com.chefsdelights.farmersrespite.common.crafting.KettleRecipe;
 import com.chefsdelights.farmersrespite.core.FarmersRespite;
 import com.chefsdelights.farmersrespite.core.registry.FRBlockEntityTypes;
 import com.chefsdelights.farmersrespite.core.registry.FRRecipeSerializers;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
@@ -47,7 +48,7 @@ import vectorwing.farmersdelight.common.registry.ModParticleTypes;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider, HeatableBlockEntity, Nameable {
+public class KettleBlockEntity extends SyncedBlockEntity implements MenuProvider, ExtendedScreenHandlerFactory, HeatableBlockEntity, Nameable {
 
     public static final String TAG_KEY_COOK_RECIPES_USED = "RecipesUsed";
     public static final int MEAL_DISPLAY_SLOT = 2;
