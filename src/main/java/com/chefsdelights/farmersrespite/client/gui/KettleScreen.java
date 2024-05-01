@@ -90,7 +90,7 @@ public class KettleScreen extends AbstractContainerScreen<KettleContainer> {
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         super.renderLabels(guiGraphics, mouseX, mouseY);
-        guiGraphics.drawString(this.font , this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752);
+        guiGraphics.drawString(this.font , this.playerInventoryTitle, 8, this.imageHeight - 96 + 2, 4210752, false);
     }
 
     @Override
